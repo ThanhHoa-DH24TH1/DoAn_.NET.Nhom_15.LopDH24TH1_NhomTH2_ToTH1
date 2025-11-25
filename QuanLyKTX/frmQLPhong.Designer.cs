@@ -107,6 +107,7 @@
             dgvPhong.RowHeadersWidth = 51;
             dgvPhong.Size = new Size(678, 341);
             dgvPhong.TabIndex = 16;
+            dgvPhong.CellContentClick += dgvPhong_CellContentClick;
             dgvPhong.DataBindingComplete += dgv_DataBindingComplete;
             // 
             // btnLamMoi

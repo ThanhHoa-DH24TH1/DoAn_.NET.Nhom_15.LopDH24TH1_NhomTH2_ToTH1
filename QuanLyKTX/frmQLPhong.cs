@@ -13,12 +13,14 @@ namespace QuanLyKTX
     public partial class frmQLPhong : Form
     {
         private RoomService _roomService;
+        private StudentService _studentService;
         private string _userRole; // Để phân quyền
 
         public frmQLPhong(string userRole)
         {
             InitializeComponent();
             _roomService = new RoomService();
+            _studentService = new StudentService();
             _userRole = userRole;
         }
 
@@ -290,6 +292,46 @@ namespace QuanLyKTX
 
             // Gọi Helper
             FormHelper.ToggleChatbot(screenPoint);
+        }
+
+        private void dgvPhong_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            try
+            {
+                // 1. Lấy thông tin phòng đang chọn
+                int roomId = (int)dgvPhong.Rows[e.RowIndex].Cells["RoomID"].Value;
+                string roomNumber = dgvPhong.Rows[e.RowIndex].Cells["RoomNumber"].Value.ToString();
+
+                // 2. Gọi Service để lấy danh sách tên sinh viên
+                List<string> studentNames = _studentService.GetStudentNamesByRoomId(roomId);
+
+                // 3. Hiển thị MessageBox
+                if (studentNames.Count > 0)
+                {
+                    string message = $"Danh sách sinh viên phòng {roomNumber}:\n\n";
+
+                    // Nối các tên lại với nhau, mỗi tên một dòng
+                    // Ví dụ: 
+                    // 1. Nguyễn Văn A
+                    // 2. Trần Thị B
+                    for (int i = 0; i < studentNames.Count; i++)
+                    {
+                        message += $"{i + 1}. {studentNames[i]}\n";
+                    }
+
+                    MessageBox.Show(message, "Thông tin phòng", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show($"Phòng {roomNumber} hiện đang trống.", "Thông tin phòng", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi lấy thông tin sinh viên: " + ex.Message, "Lỗi");
+            }
         }
     }
 }

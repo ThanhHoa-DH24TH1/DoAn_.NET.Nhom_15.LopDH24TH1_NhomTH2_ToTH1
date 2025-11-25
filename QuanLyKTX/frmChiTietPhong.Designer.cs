@@ -195,6 +195,7 @@
             btnHuy.TabIndex = 28;
             btnHuy.Text = "❌Hủy";
             btnHuy.UseVisualStyleBackColor = false;
+            btnHuy.Click += btnHuy_Click;
             // 
             // btnLuu
             // 
@@ -207,6 +208,7 @@
             btnLuu.TabIndex = 27;
             btnLuu.Text = "💾Lưu";
             btnLuu.UseVisualStyleBackColor = false;
+            btnLuu.Click += btnLuu_Click;
             // 
             // lbTen
             // 

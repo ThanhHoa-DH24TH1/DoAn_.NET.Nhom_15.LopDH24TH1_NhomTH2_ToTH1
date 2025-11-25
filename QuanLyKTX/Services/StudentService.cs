@@ -308,6 +308,18 @@ namespace QuanLyKTX.Services
             // Đếm những SV có trạng thái là "Đang ở" (hoặc đếm tất cả nếu bạn muốn)
             return _context.Students.Count(s => s.Status == "Đang ở");
         }
+        public List<string> GetStudentNamesByRoomId(int roomId)
+        {
+            // Truy vấn từ bảng Contracts (Hợp đồng)
+            // Lấy những HĐ có RoomId tương ứng và đang hiệu lực
+            // Join sang bảng Students để lấy tên
+
+            return _context.Contracts
+                .Where(c => c.RoomId == roomId && c.Status == "Đang hiệu lực")
+                .Include(c => c.Student) // Nối bảng Student
+                .Select(c => c.Student.FullName) // Chỉ lấy cột Tên
+                .ToList();
+        }
 
     }
 }
